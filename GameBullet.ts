@@ -1,6 +1,6 @@
 
 import { _decorator, Component, Node, Vec2, BoxCollider2D, director, v2, Sprite, Color, v3, UIOpacity, Vec3, tween } from 'cc';
-import { DissTian } from '../../_Scripts/CocosCreatorTool/DissTian';
+import { DissTian } from '../CocosCreatorTool/DissTian';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameBullet')

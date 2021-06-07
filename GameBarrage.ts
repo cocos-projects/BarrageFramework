@@ -1,7 +1,7 @@
 
 import { _decorator, Component, Node, Vec2, v2, v3 } from 'cc';
-import { DissTian } from '../../_Scripts/CocosCreatorTool/DissTian';
 import { Tools } from '../../_Scripts/Tools';
+import { DissTian } from '../CocosCreatorTool/DissTian';
 import { BulletValue, GameBullet } from './GameBullet';
 import { Helper } from './Helper';
 const { ccclass, property } = _decorator;
