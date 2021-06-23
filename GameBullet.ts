@@ -73,6 +73,7 @@ export class GameBullet extends Component {
         this.angle = 0;
         this.accel = this.value.accel;
 
+        this.value.initCB && this.value.initCB(this);
 
         this.scheduleOnce(this.nextAngle, this.value.activeDelay);
         let delay = (value.duration == undefined ? 10 : value.duration) + (this.value.activeDelay != undefined ? this.value.activeDelay : 0);
@@ -252,6 +253,8 @@ export interface BulletValue {
     isTurnBack?: TurnbackValue;
 
 
+    /**初始化回调 */
+    initCB?:Function;
     /**移动前(activeDelay)的回调(持续型) */
     moveBeforCB?: Function;
     /**删除前的回调 */
