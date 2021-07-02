@@ -30,9 +30,11 @@ export class GameBarrage {
         while (angle < 360) {
             let temp = this.CopyBulletValue(value);
             temp.direction = Helper.GetSpeedWithAngle(angle, value.speed);
-            let bullet = Tools.CreateBullet();
-            bullet.init(temp);
-            bullets.push(bullet);
+            let bullet = this.GetBullet();
+            if(bullet){
+                bullet.init(temp);
+                bullets.push(bullet);
+            }
             angle += interval;
         }
         return bullets;
@@ -79,9 +81,11 @@ export class GameBarrage {
 
                 let normalize = temp.direction.normalize();
                 temp.position = v2(temp.position.x+(normalize.x*offsetPos),temp.position.y+(normalize.y*offsetPos));
-                let bullet = Tools.CreateBullet();
-                bullet.init(temp);
-                bullets.push(bullet);
+                let bullet = this.GetBullet();
+                if(bullet){
+                    bullet.init(temp);
+                    bullets.push(bullet);
+                }
                 if(wait>0)
                 await DissTian.Tool.delaySync(wait);
                 count += interval;
@@ -100,9 +104,12 @@ export class GameBarrage {
 
                 let normalize = temp.direction.normalize();
                 temp.position = v2(temp.position.x+(normalize.x*offsetPos),temp.position.y+(normalize.y*offsetPos));
-                let bullet = Tools.CreateBullet();
-                bullet.init(temp);
-                bullets.push(bullet);
+                let bullet = this.GetBullet();
+                if(bullet){
+
+                    bullet.init(temp);
+                    bullets.push(bullet);
+                }
                 if(wait>0)
                 await DissTian.Tool.delaySync(wait);
                 count -= interval;
@@ -136,18 +143,22 @@ export class GameBarrage {
             temp1.direction = Helper.GetSpeedWithPosition(beginPos1, crossPos, value.speed);
             temp1.activeDelay = wait * count + delay;
 
-            let bullet1 = Tools.CreateBullet();
-            bullet1.init(temp1);
-            bullets.push(bullet1);
+            let bullet1 = this.GetBullet();
+            if(bullet1){
+                bullet1.init(temp1);
+                bullets.push(bullet1);
+            }
 
             let temp2 = this.CopyBulletValue(value);
             temp2.position = beginPos2;
             temp2.direction = Helper.GetSpeedWithPosition(beginPos2, crossPos, value.speed);
             temp2.activeDelay = wait * count + delay;
 
-            let bullet2 = Tools.CreateBullet();
-            bullet2.init(temp2);
-            bullets.push(bullet2);
+            let bullet2 = this.GetBullet();
+            if(bullet2){
+                bullet2.init(temp2);
+                bullets.push(bullet2);
+            }
             count++;
         }
         return bullets;
@@ -180,9 +191,12 @@ export class GameBarrage {
         while (count < spawnCount) {
             let temp = this.CopyBulletValue(value);
             // temp.activeDelay = wait * count + delay;
-            let bullet = Tools.CreateBullet();
-            bullet.init(temp);
-            bullets.push(bullet);
+            let bullet = this.GetBullet();
+            if(bullet){
+
+                bullet.init(temp);
+                bullets.push(bullet);
+            }
             count++;
             await DissTian.Tool.delaySync(wait);
         }
@@ -213,9 +227,11 @@ export class GameBarrage {
             temp.activeDelay = wait * count + delay;
             temp.position = Helper.GetRandomVector(xMin,xMax,yMin,yMax);
             temp.direction = Helper.GetRandomVector(xMin,xMax,yMin,yMax);
-            let bullet = Tools.CreateBullet();
-            bullet.init( temp);
-            bullets.push(bullet);
+            let bullet = this.GetBullet();
+            if(bullet){
+                bullet.init( temp);
+                bullets.push(bullet);
+            }
             count++;
         }
         return bullets;
@@ -304,6 +320,10 @@ export class GameBarrage {
             });
             await DissTian.Tool.delaySync(0.3);
         }
+    }
+
+    private static GetBullet(){
+        return Tools.CreateBullet();
     }
 
     /**
