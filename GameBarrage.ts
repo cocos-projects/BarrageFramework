@@ -1,6 +1,5 @@
 
 import { _decorator, Component, Node, Vec2, v2, v3 } from 'cc';
-import { Tools } from '../../_Scripts/Tools';
 import { DissTian } from '../CocosCreatorTool/DissTian';
 import { BulletValue, GameBullet } from './GameBullet';
 import { Helper } from './Helper';
@@ -323,7 +322,7 @@ export class GameBarrage {
     }
 
     private static GetBullet(){
-        return Tools.CreateBullet();
+        return window.Tools.CreateBullet();
     }
 
     /**
