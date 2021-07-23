@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Vec2, BoxCollider2D, director, v2, Sprite, Color, v3, UIOpacity, Vec3, tween } from 'cc';
+import { _decorator, Component, Node, Vec2, BoxCollider2D, director, v2, Sprite, Color, v3, UIOpacity, Vec3, tween, SpriteFrame } from 'cc';
 import { DissTian } from '../CocosCreatorTool/DissTian';
 const { ccclass, property } = _decorator;
 
@@ -7,6 +7,8 @@ const { ccclass, property } = _decorator;
 export class GameBullet extends Component {
 
     private opacity: UIOpacity;
+    private sprite: Sprite;
+    private default_SpriteFrame: SpriteFrame;
 
     public value: BulletValue;
     public angle: number;
@@ -19,7 +21,12 @@ export class GameBullet extends Component {
     private isTurnBack: boolean = false;
 
     public async init(value: BulletValue) {
-        if (!this.opacity) this.opacity = this.getComponent(UIOpacity);
+        if (!this.opacity) {
+            this.opacity = this.getComponent(UIOpacity);
+            this.sprite = this.getComponent(Sprite);
+            this.default_SpriteFrame = this.sprite.spriteFrame;
+        }
+
 
         this.value = value;
 
@@ -45,28 +52,36 @@ export class GameBullet extends Component {
             this.paths = null;
         }
 
-        switch (value.color) {
-            case 0:
-                this.getComponent(Sprite).color = new Color("#FD4545");
-                break;
-            case 1:
-                this.getComponent(Sprite).color = new Color("#45FD62");
-                break;
-            case 2:
-                this.getComponent(Sprite).color = new Color("#4579FD");
-                break;
-            case 3:
-                this.getComponent(Sprite).color = new Color("#FDF645");
-                break;
-            case 4:
-                this.getComponent(Sprite).color = new Color("#FD45B3");
-                break;
-            case 5:
-                this.getComponent(Sprite).color = new Color("#D145FD");
-                break;
-            case 6:
-                this.getComponent(Sprite).color = new Color("#FD8045");
-                break;
+        // switch (value.color) {
+        //     case 0:
+        //         this.getComponent(Sprite).color = new Color("#FD4545");
+        //         break;
+        //     case 1:
+        //         this.getComponent(Sprite).color = new Color("#45FD62");
+        //         break;
+        //     case 2:
+        //         this.getComponent(Sprite).color = new Color("#4579FD");
+        //         break;
+        //     case 3:
+        //         this.getComponent(Sprite).color = new Color("#FDF645");
+        //         break;
+        //     case 4:
+        //         this.getComponent(Sprite).color = new Color("#FD45B3");
+        //         break;
+        //     case 5:
+        //         this.getComponent(Sprite).color = new Color("#D145FD");
+        //         break;
+        //     case 6:
+        //         this.getComponent(Sprite).color = new Color("#FD8045");
+        //         break;
+        // }
+        if (value.color) {
+            this.sprite.color = value.color;
+            if (value.sprite_frame)
+                this.sprite.spriteFrame = value.sprite_frame;
+        } else {
+            this.sprite.spriteFrame = this.default_SpriteFrame;
+            this.sprite.color = Color.WHITE
         }
 
         this.angleIndex = 0;
@@ -82,7 +97,7 @@ export class GameBullet extends Component {
         }, delay);
         if (this.value.motionTimer && this.value.motionTimer > 0) {
             this.scheduleOnce(async () => {
-                this.isCanMove=false;
+                this.isCanMove = false;
                 if (this.value.motionCB) {
                     let temp = this.value.motionCB(this);
                     if (temp > 0)
@@ -92,22 +107,22 @@ export class GameBullet extends Component {
 
                 if (this.value.isTurnBack) {
                     this.scheduleOnce(async () => {
-                        this.value.isTurnBack.callback&&this.value.isTurnBack.callback();
+                        this.value.isTurnBack.callback && this.value.isTurnBack.callback();
                         //开始折返
                         if (this.paths) {
                             let speed = this.value.speed;
                             this.isCanMove = true;
                             this.isContinuedRotate = true;
                             this.value.rotateAngle = null;
-                            this.isTurnBack=true;
-                            await DissTian.Tool.delaySync(this.value.isTurnBack.time+this.value.motionTimer);
+                            this.isTurnBack = true;
+                            await DissTian.Tool.delaySync(this.value.isTurnBack.time + this.value.motionTimer);
                             this.delete();
                         }
-                    },this.value.isTurnBack.time+this.value.motionTimer);
+                    }, this.value.isTurnBack.time + this.value.motionTimer);
                 }
             }, this.value.motionTimer);
 
-            
+
         }
     }
 
@@ -176,7 +191,7 @@ export class GameBullet extends Component {
 
         if (this.isTurnBack) {
             let angle = this.paths.pop();
-            if (angle!=undefined)
+            if (angle != undefined)
                 this.node.angle = angle + 180;
         } else {
             if (!this.isContinuedRotate)
@@ -232,7 +247,9 @@ export interface BulletValue {
     /**递减到0的时间 */
     accelTimer?: number;
     /**子弹颜色 */
-    color: number;
+    color?: Color;
+    /**子弹贴图 */
+    sprite_frame?: SpriteFrame;
     /**延迟发射 */
     activeDelay?: number;
     /**延迟发射时隐藏 */
@@ -254,7 +271,7 @@ export interface BulletValue {
 
 
     /**初始化回调 */
-    initCB?:Function;
+    initCB?: Function;
     /**移动前(activeDelay)的回调(持续型) */
     moveBeforCB?: Function;
     /**删除前的回调 */

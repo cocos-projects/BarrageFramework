@@ -267,7 +267,7 @@ export class GameBarrage {
 
         for (let i = 0; i < 12; i++) {
             this.CreateRotateAndShoot(0+30*i,300+30*i,5,8,{
-                color:i%6,
+                // //color:i%6,
                 position,
                 speed:-350,
                 activeDelay:0,
@@ -283,7 +283,7 @@ export class GameBarrage {
     public static async Petal2(position:Vec2){
         for (let i = 0; i < 12; i++) {
             this.CreateRotateAndShoot(-(0+30*i),-(300+30*i),5,8,{
-                color:i%6,
+                // //color:i%6,
                 position,
                 speed:-350,
                 activeDelay:0,
@@ -293,7 +293,7 @@ export class GameBarrage {
         await DissTian.Tool.delaySync(8);
         for (let i = 0; i < 12; i++) {
             this.CreateRotateAndShoot(0+30*i,300+30*i,5,8,{
-                color:i%6,
+                //color:i%6,
                 position,
                 speed:-350,
                 activeDelay:0,
@@ -305,7 +305,7 @@ export class GameBarrage {
     public static async Petal3(position:Vec2){
         for (let i = 0; i < 18; i++) {
             // this.CreateLine(10,5,{
-            //     color:i%6,
+            //     //color:i%6,
             //     speed:300,
             //     position,
             //     direction:Helper.GetSpeedWithAngle(i*20,300),
@@ -313,7 +313,7 @@ export class GameBarrage {
             // });
 
             this.CreateRotateAndShoot(0,360,10,5,{
-                color:i%6,
+                //color:i%6,
                 speed:300,
                 position,
             });
@@ -339,21 +339,21 @@ export class GameBarrage {
             direction: v2(25, 400),
             speed: 300,
             activeDelay: 0,
-            color: 0
+            ////color:0
         });
         this.CreateLine(50, 15,{
             position: v2(75, 0),
             direction: v2(75, 400),
             speed: 300,
             activeDelay: 0,
-            color: 0
+            ////color:0
         });
         this.CreateLine(50, 15,{
             position: v2(125, 0),
             direction: v2(125, 400),
             speed: 300,
             activeDelay: 0,
-            color: 0
+            ////color:0
         });
         this.CreateLine(50, 15,{
             position: v2(175, 0),
@@ -361,35 +361,35 @@ export class GameBarrage {
             speed: 300,
             duration: 15,
             activeDelay: 0,
-            color: 0
+            ////color:0
         });
         this.CreateLine(50, 15,{
             position: v2(225, 0),
             direction: v2(225, 400),
             speed: 300,
             activeDelay: 0,
-            color: 0
+            ////color:0
         });
         this.CreateLine(50, 15,{
             position: v2(275, 0),
             direction: v2(275, 400),
             speed: 300,
             activeDelay: 0,
-            color: 0
+            ////color:0
         });
         this.CreateLine(50, 15,{
             position: v2(325, 0),
             direction: v2(325, 400),
             speed: 300,
             activeDelay: 0,
-            color: 0
+            ////color:0
         });
         this.CreateLine(50, 15,{
             position: v2(375, 0),
             direction: v2(375, 400),
             speed: 300,
             activeDelay: 0,
-            color: 0
+            ////color:0
         });
     }
 
@@ -405,19 +405,19 @@ export class GameBarrage {
         // this.CreateRotateAndShoot(2, position, 41, 150, 30, 100, 5, 0, 0.6);
 
         this.CreateRotateAndShoot(45,135,5,0,{
-            color:0,
+            // //color:0,
             position,
             speed:300,
             activeDelay:0
         });
         this.CreateRotateAndShoot(43,143,5,0,{
-            color:0,
+            //color:0,
             position,
             speed:300,
             activeDelay:0.3
         });
         this.CreateRotateAndShoot(41,150,5,0,{
-            color:0,
+            //color:0,
             position,
             speed:300,
             activeDelay:0.6
@@ -447,43 +447,43 @@ export class GameBarrage {
         // this.CreateRotateAndShoot(5, v2(350, position.y), 450, 270, 350, -100, -8, 1, 0);
 
         this.CreateRotateAndShoot(0,180,8,1,{
-            color:0,
+            //color:0,
             speed:350,
             position
         });
         this.CreateRotateAndShoot(90,270,8,1,{
-            color:0,
+            //color:0,
             speed:350,
             position
         });
         this.CreateRotateAndShoot(180,360,8,1,{
-            color:0,
+            //color:0,
             speed:350,
             position
         });
         this.CreateRotateAndShoot(270,450,8,1,{
-            color:0,
+            //color:0,
             speed:350,
             position
         });
 
         this.CreateRotateAndShoot(180,0,8,1,{
-            color:0,
+            //color:0,
             speed:350,
             position
         });
         this.CreateRotateAndShoot(270,90,8,1,{
-            color:0,
+            //color:0,
             speed:350,
             position
         });
         this.CreateRotateAndShoot(360,180,8,1,{
-            color:0,
+            //color:0,
             speed:350,
             position
         });
         this.CreateRotateAndShoot(450,270,8,1,{
-            color:0,
+            //color:0,
             speed:350,
             position
         });
@@ -510,17 +510,17 @@ export class GameBarrage {
         // this.CreateCircle(4, v2(position.x + 100, position.y + 50), 0, 250, 10, 1);
 
         this.CreateCircle(10,{
-            color:0,
+            //color:0,
             position,
             speed:250 
         });
         this.CreateCircle(10,{
-            color:0,
+            //color:0,
             position:v2(position.x + -100, position.y + 50),
             speed:250 
         });
         this.CreateCircle(10,{
-            color:0,
+            //color:0,
             position:v2(position.x + 100, position.y + 50),
             speed:250 
         });
@@ -532,12 +532,12 @@ export class GameBarrage {
      */
     public static XOverlapping(position:Vec2){
         this.CreateCrossLine(10,v2(-screen.width/2,-screen.height/2),v2(screen.width/2,screen.height/2),v2(0,0),2,{
-            color:5,
+            //color:5,
             speed:300,
             position
         });
         this.CreateCrossLine(10,v2(-screen.width/2,screen.height/2),v2(screen.width/2,-screen.height/2),v2(0,0),2,{
-            color:5,
+            //color:5,
             speed:300,
             position
         });
@@ -547,7 +547,7 @@ export class GameBarrage {
 
     public static Wang(position:Vec2){
         this.CreateLine(100,20,{
-            color:5,
+            //color:5,
             speed:50,
             position,
             rotateAngle:[{delay:0.5,angle:90,duration:3,disposable:true}],
@@ -557,7 +557,7 @@ export class GameBarrage {
         });
 
         this.CreateLine(100,20,{
-            color:5,
+            //color:5,
             speed:250,
             position,
             rotateAngle:[{delay:0.5,angle:90,duration:3,disposable:true}],
@@ -566,7 +566,7 @@ export class GameBarrage {
         });
 
         this.CreateLine(100,20,{
-            color:5,
+            //color:5,
             speed:250,
             position,
             rotateAngle:[{delay:0.5,angle:90,duration:3,disposable:true}],
@@ -575,7 +575,7 @@ export class GameBarrage {
         });
 
         this.CreateLine(100,20,{
-            color:5,
+            //color:5,
             speed:250,
             position,
             rotateAngle:[{delay:0.5,angle:90,duration:3,disposable:true}],
