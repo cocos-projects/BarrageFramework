@@ -24,7 +24,8 @@ export class GameBullet extends Component {
         if (!this.opacity) {
             this.opacity = this.getComponent(UIOpacity);
             this.sprite = this.getComponent(Sprite);
-            this.default_SpriteFrame = this.sprite.spriteFrame;
+            if (this.sprite)
+                this.default_SpriteFrame = this.sprite.spriteFrame;
         }
 
 
@@ -75,13 +76,15 @@ export class GameBullet extends Component {
         //         this.getComponent(Sprite).color = new Color("#FD8045");
         //         break;
         // }
-        if (value.color) {
-            this.sprite.color = value.color;
-            if (value.sprite_frame)
-                this.sprite.spriteFrame = value.sprite_frame;
-        } else {
-            this.sprite.spriteFrame = this.default_SpriteFrame;
-            this.sprite.color = Color.WHITE
+        if (this.sprite) {
+            if (value.color) {
+                this.sprite.color = value.color;
+                if (value.sprite_frame)
+                    this.sprite.spriteFrame = value.sprite_frame;
+            } else {
+                this.sprite.spriteFrame = this.default_SpriteFrame;
+                this.sprite.color = Color.WHITE
+            }
         }
 
         this.angleIndex = 0;

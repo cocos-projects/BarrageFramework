@@ -22,14 +22,14 @@ export class GameBarrage {
      * @param rotateAngle 子弹每帧旋转角度
      * @param survivalDuration 存活时间
      */
-    public static CreateCircle(interval: number,value: BulletValue) {
+    public static CreateCircle(interval: number,value: BulletValue,...bulletPrefab) {
         let angle = 0;
 
         let bullets=[];
         while (angle < 360) {
             let temp = this.CopyBulletValue(value);
             temp.direction = Helper.GetSpeedWithAngle(angle, value.speed);
-            let bullet = this.GetBullet();
+            let bullet = this.GetBullet(...bulletPrefab);
             if(bullet){
                 bullet.init(temp);
                 bullets.push(bullet);
@@ -55,7 +55,7 @@ export class GameBarrage {
      * @param rotateAngle 子弹每帧旋转角度
      * @param survivalDuration 存活时间
      */
-    public static async CreateRotateAndShoot(startAngle: number, endAngle: number, interval: number, duration:number,value: BulletValue,offsetPos?:number) {
+    public static async CreateRotateAndShoot(startAngle: number, endAngle: number, interval: number, duration:number,value: BulletValue,offsetPos?:number,...bulletPrefab) {
         let count = startAngle;
         let angle = Math.abs(endAngle - startAngle);
         let wait = duration / angle;
@@ -80,7 +80,7 @@ export class GameBarrage {
 
                 let normalize = temp.direction.normalize();
                 temp.position = v2(temp.position.x+(normalize.x*offsetPos),temp.position.y+(normalize.y*offsetPos));
-                let bullet = this.GetBullet();
+                let bullet = this.GetBullet(...bulletPrefab);
                 if(bullet){
                     bullet.init(temp);
                     bullets.push(bullet);
@@ -103,7 +103,7 @@ export class GameBarrage {
 
                 let normalize = temp.direction.normalize();
                 temp.position = v2(temp.position.x+(normalize.x*offsetPos),temp.position.y+(normalize.y*offsetPos));
-                let bullet = this.GetBullet();
+                let bullet = this.GetBullet(...bulletPrefab);
                 if(bullet){
 
                     bullet.init(temp);
@@ -131,7 +131,7 @@ export class GameBarrage {
      * @param duration 发射持续时间（为0表示瞬间发射所有）
      * @param delay 延迟发射时间
      */
-    public static CreateCrossLine(spawnCount: number, beginPos1: Vec2, beginPos2: Vec2, crossPos: Vec2,duration:number, value: BulletValue) {
+    public static CreateCrossLine(spawnCount: number, beginPos1: Vec2, beginPos2: Vec2, crossPos: Vec2,duration:number, value: BulletValue,...bulletPrefab) {
         let count = 0;
         let wait = duration / spawnCount;
         let delay = value.activeDelay == undefined ? 0 : value.activeDelay;
@@ -142,7 +142,7 @@ export class GameBarrage {
             temp1.direction = Helper.GetSpeedWithPosition(beginPos1, crossPos, value.speed);
             temp1.activeDelay = wait * count + delay;
 
-            let bullet1 = this.GetBullet();
+            let bullet1 = this.GetBullet(...bulletPrefab);
             if(bullet1){
                 bullet1.init(temp1);
                 bullets.push(bullet1);
@@ -153,7 +153,7 @@ export class GameBarrage {
             temp2.direction = Helper.GetSpeedWithPosition(beginPos2, crossPos, value.speed);
             temp2.activeDelay = wait * count + delay;
 
-            let bullet2 = this.GetBullet();
+            let bullet2 = this.GetBullet(...bulletPrefab);
             if(bullet2){
                 bullet2.init(temp2);
                 bullets.push(bullet2);
@@ -179,7 +179,7 @@ export class GameBarrage {
      * @param delay 延迟发射时间
      * @param value 需填方向
      */
-    public static async CreateLine(spawnCount: number, duration:number,value: BulletValue) {
+    public static async CreateLine(spawnCount: number, duration:number,value: BulletValue,...bulletPrefab) {
         if(!value || !value.direction){
             throw "需要方向";
         }
@@ -190,7 +190,7 @@ export class GameBarrage {
         while (count < spawnCount) {
             let temp = this.CopyBulletValue(value);
             // temp.activeDelay = wait * count + delay;
-            let bullet = this.GetBullet();
+            let bullet = this.GetBullet(...bulletPrefab);
             if(bullet){
 
                 bullet.init(temp);
@@ -213,7 +213,7 @@ export class GameBarrage {
      * @param duration 发射持续时间（为0表示瞬间发射所有）
      * @param delay 延迟发射时间
      */
-    public static CreateRandom(spawnCount: number,xMin:number,xMax:number,yMin:number,yMax:number,duration:number,value:BulletValue) {
+    public static CreateRandom(spawnCount: number,xMin:number,xMax:number,yMin:number,yMax:number,duration:number,value:BulletValue,...bulletPrefab) {
         let count = 0;
         let wait = duration / spawnCount;
         let delay = value.activeDelay == undefined ? 0 : value.activeDelay;
@@ -226,7 +226,7 @@ export class GameBarrage {
             temp.activeDelay = wait * count + delay;
             temp.position = Helper.GetRandomVector(xMin,xMax,yMin,yMax);
             temp.direction = Helper.GetRandomVector(xMin,xMax,yMin,yMax);
-            let bullet = this.GetBullet();
+            let bullet = this.GetBullet(...bulletPrefab);
             if(bullet){
                 bullet.init( temp);
                 bullets.push(bullet);
@@ -321,8 +321,8 @@ export class GameBarrage {
         }
     }
 
-    private static GetBullet(){
-        return window.Tools.CreateBullet();
+    private static GetBullet(...args){
+        return window.Tools.CreateBullet(...args);
     }
 
     /**
