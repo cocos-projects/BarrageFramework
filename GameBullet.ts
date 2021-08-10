@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Vec2, BoxCollider2D, director, v2, Sprite, Color, v3, UIOpacity, Vec3, tween, SpriteFrame } from 'cc';
+import { _decorator, Component, Node, Vec2, BoxCollider2D, director, v2, Sprite, Color, v3, UIOpacity, Vec3, tween, SpriteFrame, math } from 'cc';
 import { DissTian } from '../CocosCreatorTool/DissTian';
 const { ccclass, property } = _decorator;
 
@@ -20,7 +20,12 @@ export class GameBullet extends Component {
     private paths: number[];
     private isTurnBack: boolean = false;
 
-    public async init(value: BulletValue) {
+    public init(value: BulletValue) {
+        if(!value){
+            this.delete();
+            return;
+        }
+
         if (!this.opacity) {
             this.opacity = this.getComponent(UIOpacity);
             this.sprite = this.getComponent(Sprite);
@@ -51,6 +56,13 @@ export class GameBullet extends Component {
             this.paths = [];
         } else {
             this.paths = null;
+        }
+
+        if (value.track && value.track.target) {
+            value.track.target.once("active-in-hierarchy-changed", () => {
+                if (this.value)
+                    this.value.track = null;
+            }, this);
         }
 
         // switch (value.color) {
@@ -89,8 +101,12 @@ export class GameBullet extends Component {
 
         this.angleIndex = 0;
         this.angle = 0;
-        this.accel = this.value.accel;
+        this.accel = value.accel;
 
+        if(!this.value){
+            this.delete();
+            return;
+        }
         this.value.initCB && this.value.initCB(this);
 
         this.scheduleOnce(this.nextAngle, this.value.activeDelay);
@@ -192,6 +208,16 @@ export class GameBullet extends Component {
         }
         this.node.translate(dir);
 
+        if (this.value.track && this.value.track.target) {
+            // let dir = this.value.track.target.worldPosition.clone().subtract(this.node.worldPosition);
+            // let out = v3();
+            // Vec2.lerp(out,dir.normalize(),dir.normalize(),this.value.track.looked*0.01);
+            // this.node.angle = this.node.Vec2LookAt(out.normalize());
+
+            let angle = this.node.Vec2LookAt(DissTian.Tool.ConvertToWoldPosition(this.value.track.target));
+            this.node.angle = math.lerp(this.node.angle, angle, this.value.track.looked);
+        }
+
         if (this.isTurnBack) {
             let angle = this.paths.pop();
             if (angle != undefined)
@@ -271,7 +297,8 @@ export interface BulletValue {
     isCamMove?: boolean;
     /**是否根据移动的路径折返(比较耗性能) */
     isTurnBack?: TurnbackValue;
-
+    /**朝向 */
+    track?: TrackValue;
 
     /**初始化回调 */
     initCB?: Function;
@@ -297,4 +324,11 @@ export interface BulletRotateValue {
     duration?: number;
     /**延迟时间 */
     delay?: number;
+}
+
+/**追踪参数 */
+export interface TrackValue {
+    target: Node;
+    /**朝向目标倍率，1=100%直接朝向 */
+    looked: number;
 }
