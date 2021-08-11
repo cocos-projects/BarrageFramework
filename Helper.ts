@@ -1,9 +1,11 @@
-import { CCInteger, v2, Vec2 } from "cc";
+import { CCInteger, math, v2, Vec2, Vec3 } from "cc";
 
 
 export class Helper {
     private static mSinValue: number[];
     private static mCosValue: number[];
+
+    private static deg2Rad = (Math.PI * 2) / 360;
 
     static init() {
         this.mCosValue = [];
@@ -79,6 +81,16 @@ export class Helper {
         let result = end.clone().subtract(start);
         result.normalize();
         return result.multiplyScalar(speed);
+    }
+
+
+    public static GetRotatePosition(targetPosition: Vec2|Vec3, centerPosition: Vec2|Vec3, angele: number): Vec2 {
+
+        let endX = (targetPosition.x - centerPosition.x) * Math.cos(angele * this.deg2Rad) -
+            (targetPosition.y - centerPosition.y) * Math.sin(angele * this.deg2Rad) + centerPosition.x;
+        let endY = (targetPosition.y - centerPosition.y) * Math.cos(angele * this.deg2Rad) +
+            (targetPosition.x - targetPosition.x) * Math.sin(angele * this.deg2Rad) + centerPosition.y;
+        return v2(endX, endY);
     }
 }
 

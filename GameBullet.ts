@@ -1,6 +1,7 @@
 
 import { _decorator, Component, Node, Vec2, BoxCollider2D, director, v2, Sprite, Color, v3, UIOpacity, Vec3, tween, SpriteFrame, math } from 'cc';
 import { DissTian } from '../CocosCreatorTool/DissTian';
+import { Helper } from './Helper';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameBullet')
@@ -21,7 +22,7 @@ export class GameBullet extends Component {
     private isTurnBack: boolean = false;
 
     public init(value: BulletValue) {
-        if(!value){
+        if (!value) {
             this.delete();
             return;
         }
@@ -103,7 +104,7 @@ export class GameBullet extends Component {
         this.angle = 0;
         this.accel = value.accel;
 
-        if(!this.value){
+        if (!this.value) {
             this.delete();
             return;
         }
@@ -208,6 +209,26 @@ export class GameBullet extends Component {
         }
         this.node.translate(dir);
 
+        //围绕
+        if (this.value.around && this.value.around.target) {
+            let angle = DissTian.Tool.Vec2LookAt(this.node.position, this.value.around.target);
+            let radius = Math.sqrt(Math.pow(this.value.around.target.x - this.node.position.x, 2) + Math.pow(this.value.around.target.y - this.node.position.y, 2));
+            // 将角度转换为弧度
+            let radian = Math.PI / 180 * angle;
+            // 更新节点的位置
+            let x = this.value.around.target.x + radius * Math.cos(radian);
+            let y = this.value.around.target.y + radius * Math.sin(radian);
+            this.node.setPosition(x, y);
+
+            // 计算下一帧的角度
+            // let anglePerFrame = elaspedTime * (360 / this.timePerRound);
+            // if (this.clockwise) this.angle -= anglePerFrame;
+            // else this.angle += anglePerFrame;
+            // // 重置角度，避免数值过大
+            // if (this.angle >= 360) this.angle %= 360;
+            // else if (this.angle <= -360) this.angle %= -360;
+        }
+
         if (this.value.track && this.value.track.target) {
             // let dir = this.value.track.target.worldPosition.clone().subtract(this.node.worldPosition);
             // let out = v3();
@@ -230,6 +251,7 @@ export class GameBullet extends Component {
             }
         }
     }
+
 
 
     // moveTo(pos:Vec2){
@@ -299,6 +321,8 @@ export interface BulletValue {
     isTurnBack?: TurnbackValue;
     /**朝向 */
     track?: TrackValue;
+    /**围绕 */
+    around?: AroundValue;
 
     /**初始化回调 */
     initCB?: Function;
@@ -331,4 +355,11 @@ export interface TrackValue {
     target: Node;
     /**朝向目标倍率，1=100%直接朝向 */
     looked: number;
+}
+
+/**围绕参数 */
+export interface AroundValue {
+    target: Vec3;
+    /**半径 */
+    radius: number;
 }
