@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Vec2, BoxCollider2D, director, v2, Sprite, Color, v3, UIOpacity, Vec3, tween, SpriteFrame, math } from 'cc';
+import { _decorator, Component, Node, Vec2, BoxCollider2D, director, v2, Sprite, Color, v3, UIOpacity, Vec3, tween, SpriteFrame, math, Quat } from 'cc';
 import { DissTian } from '../CocosCreatorTool/DissTian';
 import { Helper } from './Helper';
 const { ccclass, property } = _decorator;
@@ -195,6 +195,39 @@ export class GameBullet extends Component {
         }
 
 
+        //围绕
+        // if (this.value.around && this.value.around.target) {
+
+            //    this.node.angle = Helper.deg2Rad * Math.atan((this.node.position.y-this.value.around.target.y)/(this.node.position.x-this.value.around.target.x));
+
+
+            // let radian = Math.PI / 180 * (Math.atan((this.node.position.y - this.value.around.target.y) / (this.node.position.x - this.value.around.target.x)));
+            // let radius = Math.sqrt(Math.pow(this.node.position.x - this.value.around.target.x, 2) + Math.pow(this.node.position.y - this.value.around.target.y, 2));
+            // let x = this.value.around.target.x + radius * Math.cos(radian);
+            // let y = this.value.around.target.y + radius * Math.sin(radian);
+            // this.node.angle = this.node.Vec2LookAt(v3(x, y).subtract(this.node.position).normalize());
+
+
+            // let angle = DissTian.Tool.Vec2LookAt(this.node.position, this.value.around.target);
+            // let radius = Math.sqrt(Math.pow(this.value.around.target.x - this.node.position.x, 2) + Math.pow(this.value.around.target.y - this.node.position.y, 2));
+            // // 将角度转换为弧度
+            // let radian = Math.PI / 180 * angle;
+            // // 更新节点的位置
+            // let x = this.value.around.target.x + radius * Math.cos(radian);
+            // let y = this.value.around.target.y + radius * Math.sin(radian);
+            // this.node.setPosition(x, y);
+
+            // 计算下一帧的角度
+            // let anglePerFrame = elaspedTime * (360 / this.timePerRound);
+            // if (this.clockwise) this.angle -= anglePerFrame;
+            // else this.angle += anglePerFrame;
+            // // 重置角度，避免数值过大
+            // if (this.angle >= 360) this.angle %= 360;
+            // else if (this.angle <= -360) this.angle %= -360;
+            // return;
+        // }
+
+
         // this.Speed = v2(this.Speed.x + this.Accel.x * elaspedTime, this.Speed.y + this.Accel.y * elaspedTime);
         // this.Position = v2(this.Position.x+this.Speed.x * elaspedTime,this.Position.y+ this.Speed.y * elaspedTime);
         // this.node.setPosition(this.Position.x, this.Position.y);
@@ -209,25 +242,7 @@ export class GameBullet extends Component {
         }
         this.node.translate(dir);
 
-        //围绕
-        if (this.value.around && this.value.around.target) {
-            let angle = DissTian.Tool.Vec2LookAt(this.node.position, this.value.around.target);
-            let radius = Math.sqrt(Math.pow(this.value.around.target.x - this.node.position.x, 2) + Math.pow(this.value.around.target.y - this.node.position.y, 2));
-            // 将角度转换为弧度
-            let radian = Math.PI / 180 * angle;
-            // 更新节点的位置
-            let x = this.value.around.target.x + radius * Math.cos(radian);
-            let y = this.value.around.target.y + radius * Math.sin(radian);
-            this.node.setPosition(x, y);
 
-            // 计算下一帧的角度
-            // let anglePerFrame = elaspedTime * (360 / this.timePerRound);
-            // if (this.clockwise) this.angle -= anglePerFrame;
-            // else this.angle += anglePerFrame;
-            // // 重置角度，避免数值过大
-            // if (this.angle >= 360) this.angle %= 360;
-            // else if (this.angle <= -360) this.angle %= -360;
-        }
 
         if (this.value.track && this.value.track.target) {
             // let dir = this.value.track.target.worldPosition.clone().subtract(this.node.worldPosition);
@@ -253,7 +268,6 @@ export class GameBullet extends Component {
     }
 
 
-
     // moveTo(pos:Vec2){
     //     this.onMove();
 
@@ -274,7 +288,7 @@ export class GameBullet extends Component {
     }
 
     delete() {
-        this.value && this.value.destoryCB && this.value.destoryCB(this);
+        this.value && this.value.destroyCB && this.value.destroyCB(this);
         this.angle = 0;
         this.node.angle = 0;
         this.value = null;
@@ -329,7 +343,7 @@ export interface BulletValue {
     /**移动前(activeDelay)的回调(持续型) */
     moveBeforCB?: Function;
     /**删除前的回调 */
-    destoryCB?: Function;
+    destroyCB?: Function;
 }
 
 export interface TurnbackValue {

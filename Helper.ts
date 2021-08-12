@@ -5,7 +5,7 @@ export class Helper {
     private static mSinValue: number[];
     private static mCosValue: number[];
 
-    private static deg2Rad = (Math.PI * 2) / 360;
+    public static deg2Rad = (Math.PI * 2) / 360;
 
     static init() {
         this.mCosValue = [];
