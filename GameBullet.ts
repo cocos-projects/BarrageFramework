@@ -156,29 +156,37 @@ export class GameBullet extends Component {
 
         let angle = this.value.rotateAngle[this.angleIndex];
         if (angle) {
-            if (angle.delay && angle.delay > 0)
-                await DissTian.Tool.delaySync(angle.delay);
-            this.angle = angle.angle;
-            this.isContinuedRotate = angle.disposable;
-            if (this.isContinuedRotate) {
-                if (angle.isAbs)
-                    this.node.angle = angle.angle;
-                else
-                    this.node.angle += angle.angle;
-            }
-            this.angleIndex++;
-            if (!this.value) return;
+            
 
-            if (this.angleIndex >= this.value.rotateAngle.length) {
-                if (this.value.rotateAngle_loop == true)
-                    this.angleIndex = 0;
+            let fnc = () => {
+                this.angle = angle.angle;
+                this.isContinuedRotate = angle.disposable;
+                if (this.isContinuedRotate) {
+                    if (angle.isAbs)
+                        this.node.angle = angle.angle;
+                    else
+                        this.node.angle += angle.angle;
+                }
+                this.angleIndex++;
+                if (!this.value) return;
+
+                if (this.angleIndex >= this.value.rotateAngle.length) {
+                    if (this.value.rotateAngle_loop == true)
+                        this.angleIndex = 0;
+                }
+                if (this.value.rotateAngle.length > 1) {
+                    // await DissTian.Tool.delaySync(angle.duration);
+                    this.scheduleOnce(() => {
+                        this.isContinuedRotate = true;
+                        this.nextAngle();
+                    }, angle.duration);
+                }
             }
-            // this.scheduleOnce(this.nextAngle,angle.duration);
-            if (this.value.rotateAngle.length > 1) {
-                await DissTian.Tool.delaySync(angle.duration);
-                this.isContinuedRotate = true;
-                this.nextAngle();
-            }
+
+            if (angle.delay && angle.delay > 0)
+                this.scheduleOnce(fnc.bind(this),angle.delay);
+            else
+                fnc();
         }
     }
 
@@ -198,33 +206,33 @@ export class GameBullet extends Component {
         //围绕
         // if (this.value.around && this.value.around.target) {
 
-            //    this.node.angle = Helper.deg2Rad * Math.atan((this.node.position.y-this.value.around.target.y)/(this.node.position.x-this.value.around.target.x));
+        //    this.node.angle = Helper.deg2Rad * Math.atan((this.node.position.y-this.value.around.target.y)/(this.node.position.x-this.value.around.target.x));
 
 
-            // let radian = Math.PI / 180 * (Math.atan((this.node.position.y - this.value.around.target.y) / (this.node.position.x - this.value.around.target.x)));
-            // let radius = Math.sqrt(Math.pow(this.node.position.x - this.value.around.target.x, 2) + Math.pow(this.node.position.y - this.value.around.target.y, 2));
-            // let x = this.value.around.target.x + radius * Math.cos(radian);
-            // let y = this.value.around.target.y + radius * Math.sin(radian);
-            // this.node.angle = this.node.Vec2LookAt(v3(x, y).subtract(this.node.position).normalize());
+        // let radian = Math.PI / 180 * (Math.atan((this.node.position.y - this.value.around.target.y) / (this.node.position.x - this.value.around.target.x)));
+        // let radius = Math.sqrt(Math.pow(this.node.position.x - this.value.around.target.x, 2) + Math.pow(this.node.position.y - this.value.around.target.y, 2));
+        // let x = this.value.around.target.x + radius * Math.cos(radian);
+        // let y = this.value.around.target.y + radius * Math.sin(radian);
+        // this.node.angle = this.node.Vec2LookAt(v3(x, y).subtract(this.node.position).normalize());
 
 
-            // let angle = DissTian.Tool.Vec2LookAt(this.node.position, this.value.around.target);
-            // let radius = Math.sqrt(Math.pow(this.value.around.target.x - this.node.position.x, 2) + Math.pow(this.value.around.target.y - this.node.position.y, 2));
-            // // 将角度转换为弧度
-            // let radian = Math.PI / 180 * angle;
-            // // 更新节点的位置
-            // let x = this.value.around.target.x + radius * Math.cos(radian);
-            // let y = this.value.around.target.y + radius * Math.sin(radian);
-            // this.node.setPosition(x, y);
+        // let angle = DissTian.Tool.Vec2LookAt(this.node.position, this.value.around.target);
+        // let radius = Math.sqrt(Math.pow(this.value.around.target.x - this.node.position.x, 2) + Math.pow(this.value.around.target.y - this.node.position.y, 2));
+        // // 将角度转换为弧度
+        // let radian = Math.PI / 180 * angle;
+        // // 更新节点的位置
+        // let x = this.value.around.target.x + radius * Math.cos(radian);
+        // let y = this.value.around.target.y + radius * Math.sin(radian);
+        // this.node.setPosition(x, y);
 
-            // 计算下一帧的角度
-            // let anglePerFrame = elaspedTime * (360 / this.timePerRound);
-            // if (this.clockwise) this.angle -= anglePerFrame;
-            // else this.angle += anglePerFrame;
-            // // 重置角度，避免数值过大
-            // if (this.angle >= 360) this.angle %= 360;
-            // else if (this.angle <= -360) this.angle %= -360;
-            // return;
+        // 计算下一帧的角度
+        // let anglePerFrame = elaspedTime * (360 / this.timePerRound);
+        // if (this.clockwise) this.angle -= anglePerFrame;
+        // else this.angle += anglePerFrame;
+        // // 重置角度，避免数值过大
+        // if (this.angle >= 360) this.angle %= 360;
+        // else if (this.angle <= -360) this.angle %= -360;
+        // return;
         // }
 
 
@@ -265,6 +273,8 @@ export class GameBullet extends Component {
                 this.paths.push(this.node.angle);
             }
         }
+        // this.angle %= 360;
+        this.node.angle %= 360;
     }
 
 
