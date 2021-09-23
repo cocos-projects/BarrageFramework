@@ -63,6 +63,7 @@ export class GameBarrage {
         if(!offsetPos) offsetPos = 1;
         let bullets=[];
 
+        if(!value.motionTimer) value.motionTimer=0;
         let motionTimer=value.motionTimer;
         if(value.isTurnBack) motionTimer=value.isTurnBack.time;
         let num=motionTimer/(angle/interval);
